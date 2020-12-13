@@ -6,7 +6,7 @@
 /*   By: mpowder <mpowder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 13:28:05 by mpowder           #+#    #+#             */
-/*   Updated: 2020/11/02 16:23:52 by mpowder          ###   ########.fr       */
+/*   Updated: 2020/12/13 01:47:48 by mpowder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,6 @@ void				ft_lstclear(t_list **lst, void (*del)(void *));
 void				ft_lstiter(t_list *lst, void (*f)(void *));
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),
 					void (*del)(void *));
+char				*ft_strtrim_free(char **s1, char const *set);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: mpowder <mpowder@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/27 12:48:01 by mpowder           #+#    #+#              #
-#    Updated: 2020/11/04 22:19:16 by mpowder          ###   ########.fr        #
+#    Updated: 2020/12/13 01:45:34 by mpowder          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ OBJS	= ${SRCS:.c=.o}
 
 S_BONUS	=	ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 			ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c \
-			ft_lstmap.c
+			ft_lstmap.c ft_strtrim_bonus.c
 
 O_BONUS	= ${S_BONUS:.c=.o}
 
