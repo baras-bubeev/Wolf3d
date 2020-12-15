@@ -1,32 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parsing_new.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mpowder <mpowder@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/11 00:42:54 by mpowder           #+#    #+#             */
-/*   Updated: 2020/12/13 07:23:54 by mpowder          ###   ########.fr       */
+/*   Updated: 2020/12/15 02:01:03 by mpowder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-static void	ft_texture(char *src, char **dst)
-{
-	// int		fd;
-
-	(*dst) ? ft_exit(0, NOT_VALID_FILE) : 0;
-	(ft_strlen(src) < 3) ? ft_exit(0, NOT_VALID_FILE) : 0;
-	(*(++src) != ' ') ? ft_exit(0, NOT_VALID_FILE) : 0;
-	while (*src && *src == ' ')
-		src++;
-	(!(*dst = ft_strdup(src))) ? ft_exit(1, MALLOC_ERROR) : 0;
-	// ((fd = open(*dst, O_RDONLY)) < 0) ? ft_exit(-1, OPEN_ERROR) : 0;
-	// (close(fd) < 0) ? ft_exit(fd, CLOSE_ERROR) : 0;
-}
-
-static void	ft_num(char *src, int *dst, char c)
+static void	ft_get_num(char c, int *dst, char **s)
 {
 	int		i;
 	int		max;
@@ -35,52 +21,81 @@ static void	ft_num(char *src, int *dst, char c)
 	max = (c == 'R') ? 2 : 3;
 	while (i < max)
 	{
-		(max == 2 && dst[i] != 0) ? ft_exit(0, NOT_VALID_FILE) : 0;
-		(max == 3 && dst[i] != -1) ? ft_exit(0, NOT_VALID_FILE) : 0;
-		while (*src == ' ')
-			src++;
-		(!ft_isdigit(*src)) ? ft_exit(0, NOT_VALID_FILE) : 0;
-		dst[i] = *src - '0';
-		while (ft_isdigit(*(++src)))
-			dst[i] = dst[i] * 10 + (*src - '0');
-		(max == 3 && *src == ',') ? src++ : 0;
-		(max == 2 && dst[i] <= 0) ? ft_exit(0, NOT_VALID_FILE) : 0;
+		(max == 2 && dst[i] != 0) ? ft_exit(1, NOT_VALID_FILE) : 0;
+		(max == 3 && dst[i] != -1) ? ft_exit(1, NOT_VALID_FILE) : 0;
+		while (**s == ' ')
+			(*s)++;
+		(!ft_isdigit(**s)) ? ft_exit(1, NOT_VALID_FILE) : 0;
+		dst[i] = **s - '0';
+		while (ft_isdigit(*(++(*s))))
+			dst[i] = dst[i] * 10 + (**s - '0');
+		(max == 3 && **s == ',') ? (*s)++ : 0;
+		(max == 2 && dst[i] <= 0) ? ft_exit(1, NOT_VALID_FILE) : 0;
 		(max == 3 && (dst[i] < 0 || dst[i] > 255)) ?
-			ft_exit(0, NOT_VALID_FILE) : 0;
+			ft_exit(1, NOT_VALID_FILE) : 0;
 		i++;
 	}
+	while (**s == ' ')
+		(*s)++;
 }
 
-static void	ft_get_config(char **map, t_parse *cfg)
+static void	ft_get_line(char **s, char **dst)
 {
+	int		len;
 	int		i;
 
+	(*dst) ? ft_exit(1, NOT_VALID_FILE) : 0;
+	(*s)++;
+	(**s != ' ') ? ft_exit(0, NOT_VALID_FILE) : 0;
+	while (**s == ' ')
+		(*s)++;
+	len = 0;
+	while ((*s)[len] && (*s)[len] != '\n' && (*s)[len] != ' ')
+		len++;
+	(!(*dst = (char *)malloc(sizeof(*dst) * (len + 1)))) ?
+		ft_exit(1, MALLOC_ERROR) : 0;
 	i = 0;
-	while (map[i] && i < 8 && *map[i])
+	while (i < len)
 	{
-		if (*map[i] == 'N' && *(map[i] + 1) == 'O')
-			ft_texture(map[i] + 1, &cfg->no);
-		else if (*map[i] == 'S' && *(map[i] + 1) == 'O')
-			ft_texture(map[i] + 1, &cfg->so);
-		else if (*map[i] == 'W' && *(map[i] + 1) == 'E')
-			ft_texture(map[i] + 1, &cfg->we);
-		else if (*map[i] == 'E' && *(map[i] + 1) == 'A')
-			ft_texture(map[i] + 1, &cfg->ea);
-		else if (*map[i] == 'S' && *(map[i] + 1) == ' ')
-			ft_texture(map[i], &cfg->s);
-		else if (*map[i] == 'R' && *(map[i] + 1) == ' ')
-			ft_num(map[i] + 1, cfg->r, *map[i]);
-		else if (*map[i] == 'F' && *(map[i] + 1) == ' ')
-			ft_num(map[i] + 1, cfg->f, *map[i]);
-		else if (*map[i] == 'C' && *(map[i] + 1) == ' ')
-			ft_num(map[i] + 1, cfg->c, *map[i]);
-		else
-			ft_exit(0, NOT_VALID_FILE);
-		i++;
+		(*dst)[i++] = **s;
+		(*s)++;
 	}
+	(*dst)[i] = 0;
+	while (**s == ' ')
+		(*s)++;
+	// ((i = open(*dst, O_RDONLY)) < 0) ? ft_exit(i, OPEN_ERROR) : 0;
+	// (close(i) < 0) ? ft_exit(i, CLOSE_ERROR) : 0;
 }
 
-void		ft_parsing(char **map)
+static char	*ft_get_config(char *s, t_parse *cfg)
+{
+	int		i;
+	char	*tmp;
+
+	i = 0;
+	while (*s && i < 8)
+	{
+		while (*s == '\n' || *s == ' ')
+			s++;
+		tmp = s;
+		(*s == 'N' && *(s + 1) == 'O' && s++) ? ft_get_line(&s, &cfg->no) : 0;
+		(*s == 'W' && *(s + 1) == 'E' && s++) ? ft_get_line(&s, &cfg->we) : 0;
+		(*s == 'E' && *(s + 1) == 'A' && s++) ? ft_get_line(&s, &cfg->ea) : 0;
+		(*s == 'S' && *(s + 1) == 'O' && s++) ? ft_get_line(&s, &cfg->so) : 0;
+		(*s == 'S' && *(s + 1) == ' ') ? ft_get_line(&s, &cfg->s) : 0;
+		(*s == 'R' && *(s + 1) == ' ') ? ft_get_num(*s++, cfg->r, &s) : 0;
+		(*s == 'F' && *(s + 1) == ' ') ? ft_get_num(*s++, cfg->f, &s) : 0;
+		(*s == 'C' && *(s + 1) == ' ') ? ft_get_num(*s++, cfg->c, &s) : 0;
+		(tmp == s) ? ft_exit(1, NOT_VALID_FILE) : 0;
+		i++;
+	}
+	while (*s && *s == '\n')
+		s++;
+	(ft_strnstr(s, "\n\n", ft_strlen(s))) ? ft_exit(1, NOT_VALID_FILE) : 0;
+	return (s);
+}
+
+void		ft_parsing(char ***map, char *str)
 {
 	t_parse	cfg;
 	int		i;
@@ -98,9 +113,6 @@ void		ft_parsing(char **map)
 	cfg.c[0] = -1;
 	cfg.c[1] = -1;
 	cfg.c[2] = -1;
-	ft_get_config(map, &cfg);
-	i = 0;
-	while (i < 8)
-		free(map[i++]);
-	map += 8;
+	if (!(*map = ft_split(ft_get_config(str, &cfg), '\n')))
+		ft_exit(-1, MALLOC_ERROR);
 }
