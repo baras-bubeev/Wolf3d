@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mpowder <mpowder@student.42.fr>            +#+  +:+       +#+         #
+#    By: baras <baras@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/09/27 12:48:01 by mpowder           #+#    #+#              #
-#    Updated: 2020/12/13 01:45:34 by mpowder          ###   ########.fr        #
+#    Updated: 2021/01/18 13:33:30 by baras            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ RM		= rm -f
 CFLAGS	= -Wall -Wextra -Werror
 
 .c.o:
-			${CC} ${CFLAGS} -I${INC} -c $< -o ${<:.c=.o}
+			${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
 $(NAME):	${OBJS} ${INC}
 			${AR} ${NAME} ${OBJS}

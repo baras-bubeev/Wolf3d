@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpowder <mpowder@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpowder <mpowder@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/11 00:42:54 by mpowder           #+#    #+#             */
-/*   Updated: 2020/12/21 20:26:56 by mpowder          ###   ########.fr       */
+/*   Updated: 2021/03/15 11:25:50 by mpowder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ static void	ft_get_line(char **s, char **dst)
 
 	(*dst) ? ft_exit(1, NOT_VALID_FILE) : 0;
 	(*s)++;
-	(**s != ' ') ? ft_exit(0, NOT_VALID_FILE) : 0;
+	(**s != ' ') ? ft_exit(1, NOT_VALID_FILE) : 0;
 	while (**s == ' ')
 		(*s)++;
 	len = 0;
 	while ((*s)[len] && (*s)[len] != '\n' && (*s)[len] != ' ')
 		len++;
 	(!(*dst = (char *)malloc(sizeof(*dst) * (len + 1)))) ?
-		ft_exit(1, MALLOC_ERROR) : 0;
+		ft_exit(-1, MALLOC_ERROR) : 0;
 	i = 0;
 	while (i < len)
 	{
@@ -63,8 +63,6 @@ static void	ft_get_line(char **s, char **dst)
 	(*dst)[i] = 0;
 	while (**s == ' ')
 		(*s)++;
-	// ((i = open(*dst, O_RDONLY)) < 0) ? ft_exit(i, OPEN_ERROR) : 0;
-	// (close(i) < 0) ? ft_exit(i, CLOSE_ERROR) : 0;
 }
 
 static char	*ft_get_config(char *s, t_parse *cfg)
@@ -95,23 +93,21 @@ static char	*ft_get_config(char *s, t_parse *cfg)
 	return (s);
 }
 
-void		ft_parsing(char ***map, char *str)
+void		ft_parsing(char *str, t_parse *cfg)
 {
-	t_parse	cfg;
-
-	cfg.r[0] = 0;
-	cfg.r[1] = 0;
-	cfg.no = 0;
-	cfg.so = 0;
-	cfg.we = 0;
-	cfg.ea = 0;
-	cfg.s = 0;
-	cfg.f[0] = -1;
-	cfg.f[1] = -1;
-	cfg.f[2] = -1;
-	cfg.c[0] = -1;
-	cfg.c[1] = -1;
-	cfg.c[2] = -1;
-	if (!(*map = ft_split(ft_get_config(str, &cfg), '\n')))
+	cfg->r[0] = 0;
+	cfg->r[1] = 0;
+	cfg->no = 0;
+	cfg->so = 0;
+	cfg->we = 0;
+	cfg->ea = 0;
+	cfg->s = 0;
+	cfg->f[0] = -1;
+	cfg->f[1] = -1;
+	cfg->f[2] = -1;
+	cfg->c[0] = -1;
+	cfg->c[1] = -1;
+	cfg->c[2] = -1;
+	if (!(cfg->map = ft_split(ft_get_config(str, cfg), '\n')))
 		ft_exit(-1, MALLOC_ERROR);
 }

@@ -1,0 +1,1 @@
+gcc main.c map_validation.c parsing.c exit.c window.c my_pixel_put.c keypress.c raycast.c var_init.c texture.c sprite.c screen.c libft/libft.a -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz && ./a.out maps/config.1.cub

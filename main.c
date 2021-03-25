@@ -3,14 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mpowder <mpowder@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mpowder <mpowder@student.21-school.ru>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/10 22:50:27 by mpowder           #+#    #+#             */
-/*   Updated: 2020/12/15 02:05:06 by mpowder          ###   ########.fr       */
+/*   Updated: 2021/03/25 13:32:33 by mpowder          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static void	ft_free(t_mlx *mlx)
+{
+	int	i;
+
+	free(mlx->allspr.spr);
+	free(mlx->allspr.z_buffer);
+	i = 0;
+	while (i < mlx->cfg.map_size)
+		free(mlx->cfg.map[i++]);
+	free(mlx->cfg.map);
+}
+
+static void	ft_sprite_pos(t_allspr *allspr, char **map)
+{
+	int	i;
+	int	j;
+	int	x;
+
+	i = -1;
+	x = 0;
+	while (map[++i])
+	{
+		j = -1;
+		while (map[i][++j])
+		{
+			if (map[i][j] == '2')
+			{
+				allspr->spr[x].x = (double)j + 0.5;
+				allspr->spr[x].y = (double)i + 0.5;
+				x++; 
+			}
+		}
+	}
+}
 
 static void	ft_file_read(char *fname, char **config)
 {
@@ -40,33 +75,28 @@ static void	ft_file_read(char *fname, char **config)
 int			main(int argc, char **argv)
 {
 	char	*config;
-	char	**map;
+	t_mlx	mlx;
 
-	(argc > 1 && ft_strncmp(argv[1] + (ft_strlen(argv[1]) - 4), FILE_TYPE, 5)) ?
+	mlx.save = 0;
+	(argc == 1) ? ft_exit(1, NO_FILE) : 0;
+	(ft_strncmp(argv[1] + (ft_strlen(argv[1]) - 4), FILE_TYPE, 5)) ?
 		ft_exit(1, NOT_VALID_TYPE) : 0;
+	if (argc == 3)
+		if (ft_strncmp(argv[2], SAVE, 7))
+			ft_exit(1, NOT_VALID_ARG);
+		else
+			mlx.save = 1;
+	(argc > 3) ? ft_exit(1, TOO_MANY_ARG) : 0;
 	ft_file_read(argv[1], &config);
-	ft_parsing(&map, config);
+	ft_parsing(config, &mlx.cfg);
 	free(config);
-	ft_map_validation(map);
+	mlx.allspr.spr_num = ft_map_validation(mlx.cfg.map);
+	(!(mlx.allspr.spr = (t_sprite *)malloc(sizeof(t_sprite)
+		* mlx.allspr.spr_num)))	? ft_exit(-1, MALLOC_ERROR) : 0;
+	ft_sprite_pos(&mlx.allspr, mlx.cfg.map);
+	(!(mlx.allspr.z_buffer = (double *)malloc(sizeof(mlx.allspr.z_buffer)
+		* mlx.cfg.r[0]))) ? ft_exit(-1, MALLOC_ERROR) : 0;
+	ft_window(&mlx);
+	ft_free(&mlx);
 	return (0);
 }
-
-	// i = 0;
-	// while (i < 8)
-	// 	free(map[i++]);
-	// map += 8;
-	// ft_map_validation(map);
-
-	// printf("\n**************************\n");
-	// printf("x = |%d|\ny = |%d|\n", cfg.r[0], cfg.r[1]);
-	// printf("no = |%s|\n", cfg.no);
-	// printf("so = |%s|\n", cfg.so);
-	// printf("we = |%s|\n", cfg.we);
-	// printf("ea = |%s|\n", cfg.ea);
-	// printf(" s = |%s|\n", cfg.s);
-	// printf("***F***\n");
-	// printf("R = |%3d|\nG = |%3d|\nB = |%3d|\n", cfg.f[0], cfg.f[1], cfg.f[2]);
-	// printf("***C***\n");
-	// printf("R = |%3d|\nG = |%3d|\nB = |%3d|\n", cfg.c[0], cfg.c[1], cfg.c[2]);
-	// while (*map)
-	// printf("%s\n", *map++);
