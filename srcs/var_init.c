@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   var_init.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mpowder <mpowder@student.21-school.ru>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/06 09:21:34 by mpowder           #+#    #+#             */
-/*   Updated: 2021/03/25 13:33:44 by mpowder          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
 static void ft_dir_init(t_mlx *mlx, int i, int j)
@@ -49,7 +37,7 @@ void    ft_var_init(t_mlx *mlx)
     while (mlx->cfg.map[i])
     {
         j = 0;
-        while (j < ft_strlen(mlx->cfg.map[i]))
+        while (j < (int)ft_strlen(mlx->cfg.map[i]))
 	    {
             if (ft_strchr(DIRECTION, mlx->cfg.map[i][j]))
             {

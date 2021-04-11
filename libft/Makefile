@@ -1,15 +1,3 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: baras <baras@student.42.fr>                +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2020/09/27 12:48:01 by mpowder           #+#    #+#              #
-#    Updated: 2021/01/18 13:33:30 by baras            ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 SRCS	=	ft_atoi.c ft_isalnum.c ft_isalpha.c ft_isascii.c ft_isdigit.c \
 			ft_isprint.c ft_strncmp.c ft_strnstr.c ft_tolower.c ft_toupper.c \
 			ft_strrchr.c ft_strchr.c ft_strlcat.c ft_strlcpy.c ft_strlen.c \

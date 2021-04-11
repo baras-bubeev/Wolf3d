@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   cub3d.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mpowder <mpowder@student.21-school.ru>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/10 23:42:05 by mpowder           #+#    #+#             */
-/*   Updated: 2021/03/25 09:47:00 by mpowder          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -63,7 +51,6 @@ typedef struct	s_parse
 	int			f[3];
 	int			c[3];
 	char		**map;
-	int			map_size;
 }				t_parse;
 
 typedef struct	s_image
@@ -167,7 +154,7 @@ typedef struct	s_mlx
 	t_raycast	ray;
 	t_texture	no_tex;
 	t_texture	so_tex;
-	t_texture	we_tex;                                              
+	t_texture	we_tex;
 	t_texture	ea_tex;
 	t_texture	sp_tex;
 	t_allspr	allspr;
@@ -177,15 +164,16 @@ int		main(int argc, char **argv);
 void	ft_parsing(char *str, t_parse *cfg);
 void	ft_exit(int n, char *str);
 int		ft_map_validation(char **map);
-void    ft_window(t_mlx *mlx);
-void    my_pixel_put(t_image *img, int x, int y, int color);
+void	ft_window(t_mlx *mlx);
+void	my_pixel_put(t_image *img, int x, int y, int color);
 int		ft_keypress(int key, t_mlx *mlx);
-void    ft_var_init(t_mlx *mlx);
-void    ft_draw_minimap(t_mlx *mlx);
-void    ft_raycast(t_mlx *mlx);
+void	ft_var_init(t_mlx *mlx);
+void	ft_draw_minimap(t_mlx *mlx);
+void	ft_raycast(t_mlx *mlx);
 void	ft_texture(t_mlx *mlx, int x);
 void	ft_sprite(t_mlx *mlx);
 void	ft_screen(t_mlx *mlx);
-int     ft_x_press(t_mlx *mlx);
+int		ft_x_press(t_mlx *mlx);
+void	ft_free(t_mlx *mlx);
 
 #endif

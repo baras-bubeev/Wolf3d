@@ -1,16 +1,5 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mpowder <mpowder@student.21-school.ru>     +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/01/25 14:08:27 by mpowder           #+#    #+#              #
-#    Updated: 2021/03/25 18:50:26 by mpowder          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 SRCS	=	main.c \
+			srcs/draw_minimap.c \
 			srcs/exit.c \
 			srcs/keypress.c \
 			srcs/map_validation.c \
@@ -25,13 +14,13 @@ SRCS	=	main.c \
 
 OBJS	= ${SRCS:.c=.o}
 
-NAME	= cub3D
+NAME	= wolf_3D
 
 CC		= gcc
 
 RM		= rm -f
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -g -fsanitize=address -Wall -Wextra -Werror
 
 MLX		= -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 

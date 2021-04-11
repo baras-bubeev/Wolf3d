@@ -1,25 +1,13 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mpowder <mpowder@student.21-school.ru>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/10 22:50:27 by mpowder           #+#    #+#             */
-/*   Updated: 2021/03/25 13:32:33 by mpowder          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
-static void	ft_free(t_mlx *mlx)
+void		ft_free(t_mlx *mlx)
 {
 	int	i;
 
 	free(mlx->allspr.spr);
 	free(mlx->allspr.z_buffer);
 	i = 0;
-	while (i < mlx->cfg.map_size)
+	while (mlx->cfg.map[i])
 		free(mlx->cfg.map[i++]);
 	free(mlx->cfg.map);
 }
@@ -41,7 +29,7 @@ static void	ft_sprite_pos(t_allspr *allspr, char **map)
 			{
 				allspr->spr[x].x = (double)j + 0.5;
 				allspr->spr[x].y = (double)i + 0.5;
-				x++; 
+				x++;
 			}
 		}
 	}
@@ -81,18 +69,15 @@ int			main(int argc, char **argv)
 	(argc == 1) ? ft_exit(1, NO_FILE) : 0;
 	(ft_strncmp(argv[1] + (ft_strlen(argv[1]) - 4), FILE_TYPE, 5)) ?
 		ft_exit(1, NOT_VALID_TYPE) : 0;
-	if (argc == 3)
-		if (ft_strncmp(argv[2], SAVE, 7))
-			ft_exit(1, NOT_VALID_ARG);
-		else
-			mlx.save = 1;
+	if (argc == 3 && (mlx.save = 1))
+		(ft_strncmp(argv[2], SAVE, 7)) ? ft_exit(1, NOT_VALID_ARG) : 0;
 	(argc > 3) ? ft_exit(1, TOO_MANY_ARG) : 0;
 	ft_file_read(argv[1], &config);
 	ft_parsing(config, &mlx.cfg);
 	free(config);
 	mlx.allspr.spr_num = ft_map_validation(mlx.cfg.map);
 	(!(mlx.allspr.spr = (t_sprite *)malloc(sizeof(t_sprite)
-		* mlx.allspr.spr_num)))	? ft_exit(-1, MALLOC_ERROR) : 0;
+		* mlx.allspr.spr_num))) ? ft_exit(-1, MALLOC_ERROR) : 0;
 	ft_sprite_pos(&mlx.allspr, mlx.cfg.map);
 	(!(mlx.allspr.z_buffer = (double *)malloc(sizeof(mlx.allspr.z_buffer)
 		* mlx.cfg.r[0]))) ? ft_exit(-1, MALLOC_ERROR) : 0;

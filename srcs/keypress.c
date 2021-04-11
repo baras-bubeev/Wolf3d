@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   keypress.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mpowder <mpowder@student.21-school.ru>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/03/02 14:45:34 by mpowder           #+#    #+#             */
-/*   Updated: 2021/03/25 13:34:25 by mpowder          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
 static void ft_up_down_key(int key, t_mlx *mlx, double mvSpeed, double er)
@@ -56,7 +44,7 @@ static void ft_a_d_key(int key, t_mlx *mlx, double mvSpeed, double er)
     }
 }
 
-static void ft_left_right_key(int key, t_mlx *mlx, double rSpeed)
+static void ft_left_right_key(t_mlx *mlx, double rSpeed)
 {
     double  oldDir;
     double  oldPlane;
@@ -89,9 +77,9 @@ int  ft_keypress(int key, t_mlx *mlx)
     if (key == A_KEY || key == D_KEY)
         ft_a_d_key(key, mlx, mvSpeed, er);
     if (key == LEFT_KEY)
-        ft_left_right_key(key, mlx, rSpeed);
+        ft_left_right_key(mlx, rSpeed);
     if (key == RIGHT_KEY)
-        ft_left_right_key(key, mlx, -rSpeed);
+        ft_left_right_key(mlx, -rSpeed);
     ft_raycast(mlx);
     // ft_draw_minimap(mlx);
     return (1);
