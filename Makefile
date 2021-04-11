@@ -28,20 +28,20 @@ MLX		= -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 			${CC} ${CFLAGS} -I. -Imlx_linux -c $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS}
-			@make -C libft/
+			@make -C libc/
 			@make -C mlx_linux/
-			${CC} ${CFLAGS} -o ${NAME} ${OBJS} libft/libft.a ${MLX}
+			${CC} ${CFLAGS} -o ${NAME} ${OBJS} libc/libc.a ${MLX}
 
 all:		${NAME}
 
 clean:
 			${RM} ${OBJS}
-			@make clean -C libft/
+			@make clean -C libc/
 			@make clean -C mlx_linux/
 
 fclean:		clean
 			${RM} ${NAME}
-			@make fclean -C libft/
+			@make fclean -C libc/
 
 re:			fclean all
 
